@@ -1,5 +1,6 @@
 package com.example.wvtest.api.repository
 
+import android.util.Log
 import com.example.wvtest.api.ContentApi
 import com.example.wvtest.api.ApiManager
 import com.example.wvtest.model.Content
@@ -21,18 +22,21 @@ class ContentRepository {
     }
 
 
-    fun getContent(callback:(res:ArrayList<ContentShelfs>?) -> Unit){
+    fun getContent(callback:(response:ArrayList<ContentShelfs>?) -> Unit){
         ApiManager.getRetrofit().create(ContentApi::class.java).getContent().enqueue(object :Callback<Content>{
             override fun onResponse(call: Call<Content>?, response: Response<Content>?) {
-
+                //log response
+//                Log.d("ContentRepository",response?.body()?.responseObject?.contentShelfs?.size.toString() )
+                callback.invoke(response?.body()?.responseObject?.contentShelfs)
             }
 
             override fun onFailure(call: Call<Content>?, t: Throwable?) {
-
+                callback.invoke(null)
             }
 
         })
     }
 }
+
 
 
